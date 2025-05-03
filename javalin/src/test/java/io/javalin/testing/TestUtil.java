@@ -13,6 +13,7 @@ import io.javalin.util.JavalinLogger;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import kong.unirest.HttpMethod;
+import kong.unirest.Unirest;
 
 public class TestUtil {
 
@@ -40,8 +41,8 @@ public class TestUtil {
             HttpUtil http = new HttpUtil(app.port());
             userCode.accept(app, http);
             app.delete("/x-test-cookie-cleaner", ctx -> ctx.cookieMap().keySet().forEach(ctx::removeCookie));
-            // FIXME: cookie are not removed
             http.call(HttpMethod.DELETE, "/x-test-cookie-cleaner");
+            Unirest.shutDown();
             app.stop();
         });
         app.unsafeConfig().appData(TestLogsKey, result.logs);
