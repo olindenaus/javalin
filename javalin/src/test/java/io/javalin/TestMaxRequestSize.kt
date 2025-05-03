@@ -13,6 +13,7 @@ class TestMaxRequestSize {
     fun `max request size is set by default`() = TestUtil.test { app, http ->
         app.post("/") { it.result(it.body()) }
         assertThat(http.post("/").body(ByteArray(1_000_000)).asString().httpCode()).isEqualTo(OK)
+//fixme: We are getting SocketException: Connection reset, Unirest  is not getting HTTP response?
         assertThat(http.post("/").body(ByteArray(1_000_001)).asString().httpCode()).isEqualTo(CONTENT_TOO_LARGE)
     }
 

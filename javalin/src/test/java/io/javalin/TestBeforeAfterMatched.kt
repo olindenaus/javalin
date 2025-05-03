@@ -14,7 +14,6 @@ import io.javalin.testing.TestUtil
 import kong.unirest.HttpResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.eclipse.jetty.server.AliasCheck
-import org.eclipse.jetty.server.handler.ContextHandler
 import org.junit.jupiter.api.Test
 
 class TestBeforeAfterMatched {
@@ -241,6 +240,7 @@ class TestBeforeAfterMatched {
         config.staticFiles.add("/public/assets", Location.CLASSPATH)
         config.staticFiles.add("src/test/external/", Location.EXTERNAL)
     }) { app, http ->
+        //FIXME afterMatched does not work with jetty resource hnalder
         app.beforeMatched { it.header("X-Matched-Before", "abc") }
         app.afterMatched { it.header("X-Matched-After", "xyz") }
         fun assertHeaders(path: String) {
